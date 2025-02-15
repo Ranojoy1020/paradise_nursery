@@ -1,11 +1,21 @@
+import { useContext } from 'react';
 import {Link} from 'react-router-dom'
+import { CartContext } from '../CartContext';
 
-export const Header = ({useCart}) => {
-    const { cart } = useCart();
+export const Header = () => {
+    const { cart } = useContext(CartContext);
     return (
-      <header className="p-4 bg-green-700 text-white flex justify-between">
+      <header className="p-4 bg-green-700 text-white flex justify-between sticky top-0 z-10">
         <Link to="/" className="text-lg font-bold">Paradise Nursery</Link>
-        <Link to="/cart">🛒 ({cart.length})</Link>
+        <div className='relative'>
+        <Link to="/cart">🛒 </Link>
+        {
+          cart.length > 0 ?
+          <span className='bg-red-500 text-white rounded-full text-xs absolute size-4 right-5 px-1'>{cart.length}</span>
+          : ''
+        }
+        
+        </div>
       </header>
     );
   };
