@@ -12,15 +12,41 @@ const App = () => {
   const [cart, setCart] = useState([]);
 
   const addToCart = (plant) => {
+    if (cart.find((item) => item.id === plant.id)) {
+      setCart((prev) =>
+        prev.map((item) =>
+          item.id === plant.id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      );
+      return;
+    }
+    else{
+      plant.quantity = 1;
+    }
     setCart((prev) => [...prev, plant]);
   };
 
-  const removeFromCart = (idx) => {
-    setCart((prev) => prev.filter((item, index) => index !== idx));
+  const removeFromCart = (plant) => {
+    if (cart.find((item) => item.id === plant.id)) {
+      setCart((prev) =>
+        prev.map((item) =>
+          item.id === plant.id ? { ...item, quantity: item.quantity - 1 } : item
+        )
+      );
+
+      if(plant.quantity === 1) deleteFromCart(plant);
+
+      return;
+    }
+    setCart((prev) => [...prev, plant]);
+  };
+
+  const deleteFromCart = (plant) => {
+    setCart((prev) => prev.filter((item) => item.id !== plant.id));
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, deleteFromCart }}>
       <Router>
         <Header />
         <Routes>
